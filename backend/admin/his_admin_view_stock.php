@@ -4,28 +4,7 @@ include('assets/inc/config.php');
 include('assets/inc/checklogin.php');
 check_login();
 //$aid=$_SESSION['ad_id'];
-$doc_id = $_SESSION['doc_id'];
-/*
-  Doctor has no previledges to delete a patient record
-  if(isset($_GET['delete']))
-  {
-        $id=intval($_GET['delete']);
-        $adn="delete from his_patients where pat_id=?";
-        $stmt= $mysqli->prepare($adn);
-        $stmt->bind_param('i',$id);
-        $stmt->execute();
-        $stmt->close();	 
-  
-          if($stmt)
-          {
-            $success = "Patients Records Deleted";
-          }
-            else
-            {
-                $err = "Try Again Later";
-            }
-    }
-    */
+$doc_id = $_SESSION['ad_id'];
 ?>
 
 <!DOCTYPE html>
@@ -63,11 +42,11 @@ $doc_id = $_SESSION['doc_id'];
                                 <div class="page-title-right">
                                     <ol class="breadcrumb m-0">
                                         <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                        <li class="breadcrumb-item"><a href="javascript: void(0);">Patients</a></li>
-                                        <li class="breadcrumb-item active">Manage Patients</li>
+                                        <li class="breadcrumb-item"><a href="javascript: void(0);">Pharmaceuticals</a></li>
+                                        <li class="breadcrumb-item active">View Pharmaceuticals</li>
                                     </ol>
                                 </div>
-                                <h4 class="page-title">Manage Patient Details</h4>
+                                <h4 class="page-title">Medicine</h4>
                             </div>
                         </div>
                     </div>
@@ -100,16 +79,29 @@ $doc_id = $_SESSION['doc_id'];
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th data-toggle="true">Patient Name</th>
-                                                <th data-hide="phone">Patient Number</th>
-                                                <th data-hide="phone">Patient Address</th>
-                                                <th data-hide="phone">Patient Category</th>
-                                                <th data-hide="phone">Action</th>
+                                                <th>Pharm Name</th>
+                                                <th>Barcode</th>
+                                                <th>Vendor</th>
+                                                <th>Category</th>
+                                                <th>Qty</th>
+                                                <th>Batch</th>
+                                                <th>Expiry</th>
+                                                <th>Purchase Price</th>
+                                                <th>Selling Price</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php
-                                            $ret = "SELECT * FROM  his_patients ORDER BY RAND() ";
+                                            $ret = "SELECT p.phar_name, p.phar_bcode, p.phar_cat, 
+                                                            s.batch_number, s.quantity, s.expiry_date, 
+                                                            s.purchase_price, s.selling_price, s.date_received,
+                                                            v.v_name AS vendor_name
+                                                        FROM his_pharma_stock s
+                                                        JOIN his_pharmaceuticals p ON s.phar_id = p.phar_id
+                                                        LEFT JOIN his_vendor v ON s.vendor_id = v.v_id
+                                                        ORDER BY p.phar_name ASC";
+
                                             $stmt = $mysqli->prepare($ret);
                                             $stmt->execute();
                                             $res = $stmt->get_result();
@@ -117,24 +109,26 @@ $doc_id = $_SESSION['doc_id'];
                                             while ($row = $res->fetch_object()) {
                                             ?>
                                                 <tr>
-                                                    <td><?php echo $cnt; ?></td>
-                                                    <td><?php echo $row->pat_fname; ?> <?php echo $row->pat_lname; ?></td>
-                                                    <td><?php echo $row->pat_number; ?></td>
-                                                    <td><?php echo $row->pat_addr; ?></td>
-                                                    <td><?php echo $row->pat_type; ?></td>
+                                                    <td><?php echo $cnt++; ?></td>
+                                                    <td><?php echo $row->phar_name; ?></td>
+                                                    <td><?php echo $row->phar_bcode; ?></td>
+                                                    <td><?php echo $row->vendor_name; ?></td>
+                                                    <td><?php echo $row->phar_cat; ?></td>
+                                                    <td><?php echo $row->quantity; ?></td>
+                                                    <td><?php echo $row->batch_number ?: 'N/A'; ?></td>
+                                                    <td><?php echo $row->expiry_date ?: 'N/A'; ?></td>
+                                                    <td><?php echo $row->purchase_price ? 'Ksh ' . $row->purchase_price : 'N/A'; ?></td>
+                                                    <td><?php echo $row->selling_price ? 'Ksh ' . $row->selling_price : 'N/A'; ?></td>
                                                     <td>
-                                                        <a href="his_doc_view_single_patient.php?pat_id=<?php echo $row->pat_id; ?>&&pat_number=<?php echo $row->pat_number; ?>" class="badge badge-success"><i class="mdi mdi-eye"></i> View</a>
-                                                        <a href="his_doc_update_single_patient.php?pat_number=<?php echo $row->pat_number; ?>" class="badge badge-primary"><i class="mdi mdi-check-box-outline "></i> Update</a>
+                                                        <a href="his_admin_view_single_pharm.php?phar_bcode=<?php echo $row->phar_bcode; ?>" class="badge badge-success"><i class="far fa-eye"></i> View</a>
                                                     </td>
+
                                                 </tr>
-                                            <?php
-                                                $cnt++;
-                                            }
-                                            ?>
+                                            <?php } ?>
                                         </tbody>
                                         <tfoot>
-                                            <tr class="active">
-                                                <td colspan="8">
+                                            <tr>
+                                                <td colspan="11">
                                                     <div class="text-right">
                                                         <ul class="pagination pagination-rounded justify-content-end footable-pagination m-t-10 mb-0"></ul>
                                                     </div>
@@ -142,8 +136,8 @@ $doc_id = $_SESSION['doc_id'];
                                             </tr>
                                         </tfoot>
                                     </table>
+                                </div>
 
-                                </div> <!-- end .table-responsive-->
                             </div> <!-- end card-box -->
                         </div> <!-- end col -->
                     </div>

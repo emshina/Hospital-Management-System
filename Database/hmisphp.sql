@@ -438,6 +438,19 @@ INSERT INTO `his_vitals` (`vit_id`, `vit_number`, `vit_pat_number`, `vit_bodytem
 
 
 -- stock
+-- CREATE TABLE his_pharma_stock (
+--   stock_id INT(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+--   phar_id INT(20) NOT NULL,
+--   batch_number VARCHAR(200),
+--   quantity INT(20) NOT NULL,
+--   expiry_date DATE,
+--   purchase_price VARCHAR(200),
+--   selling_price VARCHAR(200),
+--   vendor_id INT(20),
+--   date_received TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--   FOREIGN KEY (phar_id) REFERENCES his_pharmaceuticals(phar_id),
+--   FOREIGN KEY (vendor_id) REFERENCES his_vendor(v_id)
+-- );
 CREATE TABLE his_pharma_stock (
   stock_id INT(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   phar_id INT(20) NOT NULL,
@@ -447,10 +460,8 @@ CREATE TABLE his_pharma_stock (
   purchase_price VARCHAR(200),
   selling_price VARCHAR(200),
   vendor_id INT(20),
-  date_received TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (phar_id) REFERENCES his_pharmaceuticals(phar_id),
-  FOREIGN KEY (vendor_id) REFERENCES his_vendor(v_id)
-);
+  date_received TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;;
 
 
 
@@ -471,24 +482,57 @@ CREATE TABLE his_prescription_items (
 
 
 
-CREATE TABLE `his_visits` (
-  `visit_id` INT AUTO_INCREMENT PRIMARY KEY,
-  `pat_id` INT(20) NOT NULL,
-  `doc_id` INT(20) NOT NULL,
-  `visit_date` DATETIME DEFAULT CURRENT_TIMESTAMP,
-  `complaints` TEXT,
-  `presenting_illness` TEXT,
-  `medical_history` TEXT,
-  `surgical_history` TEXT,
-  `family_history` TEXT,
-  `social_history` TEXT,
-  `economic_history` TEXT,
-  `allergies` TEXT,
-  `impressions` TEXT,
-  `diagnosis` TEXT,
-  `clinical_summary` TEXT
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+-- CREATE TABLE `his_visits` (
+--   `visit_id` INT AUTO_INCREMENT PRIMARY KEY,
+--   `pat_id` INT(20) NOT NULL,
+--   `doc_id` INT(20) NOT NULL,
+--   `visit_date` DATETIME DEFAULT CURRENT_TIMESTAMP,
+--   `complaints` TEXT,
+--   `presenting_illness` TEXT,
+--   `medical_history` TEXT,
+--   `surgical_history` TEXT,
+--   `family_history` TEXT,
+--   `social_history` TEXT,
+--   `economic_history` TEXT,
+--   `allergies` TEXT,
+--   `impressions` TEXT,
+--   `diagnosis` TEXT,
+--   `clinical_summary` TEXT
+-- ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+
+
+
+CREATE TABLE his_visits (
+  visit_id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  pat_number VARCHAR(200) DEFAULT NULL,
+  doc_id INT(20) NOT NULL,
+  visit_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+  complaints TEXT DEFAULT NULL,
+  presenting_illness TEXT DEFAULT NULL,
+  medical_history TEXT DEFAULT NULL,
+  surgical_history TEXT DEFAULT NULL,
+  family_history TEXT DEFAULT NULL,
+  social_history TEXT DEFAULT NULL,
+  economic_history TEXT DEFAULT NULL,
+  allergies TEXT DEFAULT NULL,
+  impressions TEXT DEFAULT NULL,
+  diagnosis TEXT DEFAULT NULL,
+  clinical_summary TEXT DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;;
+
+
+
+CREATE TABLE `his_pharma_dosage` (
+  `dosage_id` INT AUTO_INCREMENT PRIMARY KEY,
+  `phar_id` INT NOT NULL,
+  `phar_name` VARCHAR(255) NOT NULL,
+  `unit_of_measure` VARCHAR(50) NOT NULL,
+  `dosage_pattern` VARCHAR(20) NOT NULL,  -- e.g., '1x3'
+  `duration_days` INT NOT NULL,
+  `notes` TEXT,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 --
 -- Indexes for dumped tables
@@ -689,7 +733,92 @@ ALTER TABLE `his_vitals`
 ALTER TABLE his_visits 
   CHANGE pat_id pat_number VARCHAR(200);
   
+
+
+-- addded
+
+-- Change data types and charset
+ALTER TABLE his_pharma_stock
+  MODIFY stock_id INT NOT NULL AUTO_INCREMENT,
+  MODIFY phar_id INT NOT NULL,
+  MODIFY batch_number VARCHAR(100),
+  MODIFY quantity INT NOT NULL,
+  MODIFY purchase_price DECIMAL(10,2),
+  MODIFY selling_price DECIMAL(10,2),
+  DEFAULT CHARSET = utf8mb4;
+
+-- Add new fields
+ALTER TABLE his_pharma_stock
+  ADD phar_bcode VARCHAR(100) AFTER phar_id,
+  ADD unit_of_measure VARCHAR(50) AFTER quantity,
+  ADD manufacture_date DATE AFTER expiry_date,
+  ADD storage_location VARCHAR(255) AFTER vendor_id,
+  ADD received_by INT AFTER date_received,
+  ADD reorder_level INT DEFAULT 0 AFTER received_by,
+  ADD notes TEXT AFTER reorder_level,
+  ADD status ENUM('active', 'expired', 'damaged', 'used', 'returned') DEFAULT 'active' AFTER notes;
+
+-- Add indexes
+ALTER TABLE his_pharma_stock
+  ADD INDEX (phar_id),
+  ADD INDEX (phar_bcode),
+  ADD INDEX (expiry_date);
+
+
+ALTER TABLE his_pharma_stock
+  MODIFY purchase_price DECIMAL(10,2),
+  MODIFY selling_price DECIMAL(10,2),
+  ADD selling_price_per_unit DECIMAL(10,2);
   
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+CREATE TABLE his_pharma_stock (
+  stock_id INT(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  phar_id INT(20) NOT NULL,
+  batch_number VARCHAR(200),
+  quantity INT(20) NOT NULL,
+  expiry_date DATE,
+  purchase_price DECIMAL(10,2),
+  selling_price DECIMAL(10,2),
+  selling_price_per_unit DECIMAL(10,2),
+  vendor_id INT(20),
+  date_received TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE his_doc_prescriptions (
+    presc_id INT AUTO_INCREMENT PRIMARY KEY,
+    pres_pat_number VARCHAR(50) NOT NULL,
+    pres_doc_number VARCHAR(50) NOT NULL,
+    pres_med_name VARCHAR(255) NOT NULL,
+    pres_med_pattern VARCHAR(100) NOT NULL,
+    pres_med_duration VARCHAR(100) NOT NULL,
+    presc_date DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE his_pharma_dispense (
+  dispense_id INT AUTO_INCREMENT PRIMARY KEY,
+  presc_id INT NOT NULL,
+  pat_number VARCHAR(50) NOT NULL,
+  pat_name VARCHAR(100),
+  med_name VARCHAR(255),
+  med_pattern VARCHAR(100),
+  med_duration VARCHAR(100),
+  quantity_dispensed INT,
+  price_per_unit DECIMAL(10,2),
+  total_price DECIMAL(10,2),
+  pharmacist_id INT,
+  dispense_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  
+);
+
+ALTER TABLE his_doc_prescriptions
+ADD COLUMN pres_med_dosage VARCHAR(50);
+
+
+ALTER TABLE his_doc_prescriptions
+  ADD COLUMN pres_med_dosage_value DECIMAL(10,2) AFTER pres_med_dosage,
+  ADD COLUMN pres_med_dosage_unit VARCHAR(20) AFTER pres_med_dosage_value;

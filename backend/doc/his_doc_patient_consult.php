@@ -120,7 +120,7 @@
                                                     <td><?php echo $row->vit_daterec; ?></td>
                                                     <td>
                                                         <a href="his_doc_vital_consult.php?pat_number=<?php echo $row->pat_number; ?>" class="badge badge-success">
-                                                            <i class="mdi mdi-beaker"></i> Capture Vitals
+                                                            <i class="mdi mdi-beaker"></i> Medical Form
                                                         </a>
                                                     </td>
                                                 </tr>

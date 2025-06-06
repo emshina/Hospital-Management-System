@@ -58,15 +58,15 @@
                                         <a href="his_doc_patient_consult.php">Doctor </a>
                                     </li>
                                     <li>
-                                        <a href="his_doc_add_stock.php">Stock</a>
+                                        <a href="presc.php">Stock</a>
                                     </li>
                                     <hr>
                                     <li>
-                                        <a href="his_doc_view_stock.php">View Stock</a>
+                                        <a href="his_doc_add_presc.php.php">presc</a>
                                     </li>
-                                    <li>
+                                    <!-- <li>
                                         <a href="his_doc_manage_stock.php">Manage Stock</a>
-                                    </li>
+                                    </li> -->
                                 </ul>
                             </li>
 

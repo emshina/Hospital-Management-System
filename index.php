@@ -30,7 +30,7 @@
             <div class="container">
                 <div class="row align-items-center justify-content-between d-flex">
                 <div id="logo">
-                    <a href="index.php"></a>
+                    <a href="index.php"><img height="40"  src="./assets/images/logo.png" alt="Logo" class="logo-img"></a>
                 </div>
                 <nav id="nav-menu-container">
                     <ul class="nav-menu">
@@ -49,9 +49,10 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-8">
-                    <h4>Caring for better life</h4>
-                    <h1>Leading the way in medical excellence</h1>
-                    <p>HMS is awarded as one of the Top Hospital Management System, which can integrate all the HIS systems, processes and machines into an intelligent information system to derive operational efficiency and assist hospitals in decision making process through MIS and Analytics.</p>
+                    <h4>Smarter Systems<br> Better Outcomes</h4>
+                    
+                    <h1 style="margin-top: 30px;"> Empowering Healthcare with Innovations</h1>
+                    <p>HMS is a next-generation Hospital Management System designed to seamlessly integrate all HIS components — systems, workflows, and medical equipment — into a unified intelligent platform, improving efficiency, accuracy, and decision-making across your healthcare institution.</p>
                 </div>
             </div>
         </div>

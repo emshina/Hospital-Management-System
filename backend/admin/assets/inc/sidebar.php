@@ -42,6 +42,32 @@
                                     </li>
                                 </ul>
                             </li>
+                          <!--adeded  -->
+                           <li>
+                                <a href="javascript: void(0);">
+                                    <i class="mdi mdi-medical-bag"></i>
+                                    <span> Medicines</span>
+                                    <span class="menu-arrow"></span>
+                                </a>
+                                <ul class="nav-second-level" aria-expanded="false">
+                                    <li>
+                                        <a href="his_admin_add_stock.php">Stock</a>
+                                    </li>
+                                 
+                                    <li>
+                                        <a href="his_admin_view_stock.php">View Stock</a>
+                                    </li>
+                                    <li>
+                                        <a href="his_admin_manage_stock.php">Manage Stock</a>
+                                    </li>      
+                                    <hr>                              
+                                    <li>
+                                        <a href="his_admin_assign_dose.php">Assign dose</a>
+                                    </li>
+                                </ul>
+                            </li>
+
+
 
                             <li>
                                 <a href="javascript: void(0);">

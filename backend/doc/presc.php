@@ -3,37 +3,7 @@
   include('assets/inc/config.php');
   include('assets/inc/checklogin.php');
   check_login();
-  $aid=$_SESSION['ad_id'];
-  if(isset($_GET['delete']))
-  {
-
-        $id=intval($_GET['delete']);
-        $adn="delete from his_visits where pat_number=?";
-        $stmt= $mysqli->prepare($adn);
-        $stmt->bind_param('i',$id);
-        $stmt->execute();
-        $stmt->close();	
-
-
-        $id=intval($_GET['delete']);
-        $adn="delete from his_patients where pat_number=?";
-        $stmt= $mysqli->prepare($adn);
-        $stmt->bind_param('i',$id);
-        $stmt->execute();
-        $stmt->close();	         
-        
-        
- 
-  
-          if($stmt)
-          {
-            $success = "Patients Records Deleted";
-          }
-            else
-            {
-                $err = "Try Again Later";
-            }
-    }
+  $doc_id = $_SESSION['doc_id'];
 ?>
 
 <!DOCTYPE html>
@@ -71,11 +41,11 @@
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
                                             <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Patients</a></li>
-                                            <li class="breadcrumb-item active">Manage Patients</li>
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Pharmacy</a></li>
+                                            <li class="breadcrumb-item active">Give Prescription</li>
                                         </ol>
                                     </div>
-                                    <h4 class="page-title">Manage Patient Details</h4>
+                                    <h4 class="page-title">Add Prescriptions</h4>
                                 </div>
                             </div>
                         </div>     
@@ -108,10 +78,12 @@
                                             <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th data-toggle="true">Patient</th>
-                                                <th data-hide="phone">Number</th>
-                                                <th data-hide="phone">Address</th>
-                                                <th data-hide="phone">Category</th>
+                                                <th data-toggle="true">Patient Name</th>
+                                                <th data-hide="phone">Patient Number</th>
+                                                <th data-hide="phone">Patient Address</th>
+                                                <th data-hide="phone">Patient Ailment</th>
+                                                <th data-hide="phone">Patient Age</th>
+                                                <th data-hide="phone">Patient Category</th>
                                                 <th data-hide="phone">Action</th>
                                             </tr>
                                             </thead>
@@ -136,13 +108,11 @@
                                                     <td><?php echo $row->pat_fname;?> <?php echo $row->pat_lname;?></td>
                                                     <td><?php echo $row->pat_number;?></td>
                                                     <td><?php echo $row->pat_addr;?></td>
+                                                    <td><?php echo $row->pat_ailment;?></td>
+                                                    <td><?php echo $row->pat_age;?> Years</td>
                                                     <td><?php echo $row->pat_type;?></td>
                                                     
-                                                    <td>
-                                                        <a href="his_admin_manage_patient.php?delete=<?php echo $row->pat_number;?>" class="badge badge-danger"><i class=" mdi mdi-trash-can-outline "></i> Delete</a>
-                                                        <a href="his_admin_view_single_patient.php?pat_id=<?php echo $row->pat_id;?>&&pat_number=<?php echo $row->pat_number;?>" class="badge badge-success"><i class="mdi mdi-eye"></i> View</a>
-                                                        <a href="his_admin_update_single_patient.php?pat_id=<?php echo $row->pat_id;?>" class="badge badge-primary"><i class="mdi mdi-check-box-outline "></i> Update</a>
-                                                    </td>
+                                                    <td><a href="presc2.php?pat_number=<?php echo $row->pat_number;?>" class="badge badge-success"><i class="fas fa-highlighter "></i> Add Prescription</a></td>
                                                 </tr>
                                                 </tbody>
                                             <?php  $cnt = $cnt +1 ; }?>
