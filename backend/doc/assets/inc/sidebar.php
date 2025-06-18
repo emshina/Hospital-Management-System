@@ -62,11 +62,19 @@
                                     </li>
                                     <hr>
                                     <li>
-                                        <a href="his_doc_add_presc.php.php">presc</a>
+                                        <a href="his_doc_add_presc.php.php">Pharmacy Presc</a>
                                     </li>
                                     <!-- <li>
-                                        <a href="his_doc_manage_stock.php">Manage Stock</a>
-                                    </li> -->
+                                        <a href="his_docpharm_account.php">Pharmacy account</a>
+                                    </li>  
+                                  -->
+                                    <li>
+                                        <a href="his_pharm_view_med.php">Pharmacy Medicine</a>
+                                    </li></li>
+                                   
+                                    <li>
+                                        <a href="his_pharm_disperse.php">Pharmacy Disperse</a>
+                                    </li>
                                 </ul>
                             </li>
 

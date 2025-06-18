@@ -37,6 +37,9 @@
                         <li class="menu-active"><a href="index.php">Home</a></li>
                         <li><a href="backend/doc/index.php">Doctor's Login</a></li>
                         <li><a href="backend/admin/index.php">Administrator Login</a></li>
+                        <li><a href="backend/pharmacist/index.php">Pharmacist Login</a></li>
+                        <li><a href="backend/admin/index.php">Account Login</a></li>
+                        <li><a href="backend/admin/index.php">Laboratory Tech Login</a></li>
                     </ul>
                 </nav><!-- #nav-menu-container -->		    		
                 </div>

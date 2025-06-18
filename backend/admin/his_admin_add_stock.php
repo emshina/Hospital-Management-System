@@ -57,9 +57,15 @@ if (isset($_POST['add_pharmaceutical'])) {
     $selling_price_per_unit = round($unit_price * 10) / 10; // Round to nearest 0.10
     }
 
-    $stock_query = "INSERT INTO his_pharma_stock (phar_id, phar_bcode, batch_number, quantity, unit_of_measure, expiry_date, manufacture_date, purchase_price, selling_price, vendor_id, storage_location, received_by, reorder_level, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $stock_query = "INSERT INTO his_pharma_stock (phar_id, phar_bcode, batch_number, quantity, unit_of_measure, expiry_date, manufacture_date, purchase_price, selling_price, selling_price_per_unit, vendor_id, storage_location, received_by, reorder_level, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt_stock = $mysqli->prepare($stock_query);
-    $stmt_stock->bind_param('ississsddiisis', $phar_id, $phar_bcode, $batch_number, $phar_qty, $unit_of_measure, $expiry_date, $manufacture_date, $purchase_price, $selling_price, $vendor_id, $storage_location, $received_by, $reorder_level, $notes);
+    $stmt_stock->bind_param(
+        'ississsdddiiiss',
+        $phar_id, $phar_bcode, $batch_number, $phar_qty, $unit_of_measure,
+        $expiry_date, $manufacture_date, $purchase_price, $selling_price,
+        $selling_price_per_unit, $vendor_id, $storage_location, $received_by,
+        $reorder_level, $notes
+    );
     $stmt_stock->execute();
 
     if ($stmt && $stmt_stock) {

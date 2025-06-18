@@ -174,6 +174,9 @@
                                     <li>
                                         <a href="his_admin_equipments_inventory.php">Assets</a>
                                     </li>
+                                                                        <li>
+                                        <a href="his_docpharm_account.php">Pharmacy account</a>
+                                    </li>   
                                     
                                 </ul>
                             </li>
